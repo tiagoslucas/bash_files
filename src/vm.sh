@@ -1,2 +1,31 @@
 #!/bin/bash
-sshpass -f ~/.swepqift ssh rbadmin_app2@10.58.112.221
+subject=''
+host=''
+access=''
+
+if [[ $# -gt 0 ]];
+then
+	subject=$1
+else
+	subject=''
+fi
+
+touch ~/.servermachines
+
+while read i;
+do
+	if [[ $i == $subject* ]];
+	then
+		host=$(echo -n $i | awk -F "%%%" '{print $1}')
+		access=$(echo -n $i | awk -F "%%%" '{print $2}')
+		break
+	fi
+done < ~/.servermachines
+
+if [[ $access == '' ]] || [[ $host == '' ]];
+then
+	echo "No matches found!"
+	exit 1
+fi
+
+env SSHPASS=$access sshpass -e ssh $host

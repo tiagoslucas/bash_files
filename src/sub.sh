@@ -2,42 +2,50 @@
 origin=$(pwd)
 if [[ `echo $1 | grep [[:alpha:]]` && -z `git $1 2>&1 | grep "not a git command"` ]]
 then
-  gitcmd=$1
-  var1='cmd'
+  gitcmd="git $1"
+  type='cmd'
 else
-  gitcmd='fetch && git status -s && git status | grep -e behind -e ahead -e each'
-  var1='dir'
+  gitcmd='git fetch && git status -s && git --no-optional-locks status | grep -e behind -e ahead -e each'
+  type='dir'
 fi
-if [[ $# -gt 1 && $var1 = 'cmd' ]]
+
+if [[ $# -gt 1 && $type = 'cmd' ]]
 then
   sources="${@:2}"
-elif [[ $# -gt 0 && $var1 = 'dir' ]]
+elif [[ $# -gt 0 && $type = 'dir' ]]
 then
   sources="${@}"
 else
   sources=( . )
 fi
+
+repos=""
 for source in ${sources[@]}
 do
   if [[ -d $origin/$source ]]
   then
-    for i in `ls -a $origin/$source`
+    for repo in `ls -a $origin/$source`
     do
-      if [[ -d $origin/$source/$i && -d $origin/$source/$i/.git ]]
+      if [[ -d $origin/$source/$repo && -d $origin/$source/$repo/.git ]]
       then
-        cd $origin/$source/$i
-        repo=$(git config --get remote.origin.url)
-        printf "%s\n" "${repo##*/}"
-        eval "git $gitcmd"
-        printf "\n"
-        cd $origin
+        repos="$repos $origin/$source/$repo"
       fi
     done
-  elif [[ -z `eval "git $gitcmd $source" 2>&1 | grep "not a git command"` ]]
+  elif [[ -z `eval "git $source" 2>&1 | grep -e "not a git command" -e "unknown option"` ]]
+  then
+    gitcmd="$gitcmd && git $source"
+  elif [[ -z `eval "$gitcmd $source" 2>&1 | grep -e "not a git command" -e "unknown option"` ]]
   then
     gitcmd="$gitcmd $source"
-  elif [[ -z `eval "git $source" 2>&1 | grep "not a git command"` ]]
-  then
-    gitcmd="$gitcmd; git $source"
   fi
+done
+
+for i in ${repos[@]}
+do
+	cd $i
+    repo=$(git config --get remote.origin.url)
+    printf "%s\n" "${repo##*/}"
+    eval "$gitcmd"
+    printf "\n"
+    cd $origin
 done
