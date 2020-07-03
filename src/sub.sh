@@ -1,4 +1,10 @@
 #!/bin/bash
+if ! command -v git &>/dev/null;
+then
+	printf "You have to install git to use sub!\n"
+	exit 1
+fi
+
 origin=$(pwd)
 if [[ `echo $1 | grep [[:alpha:]]` && -z `git $1 2>&1 | grep "not a git command"` ]]
 then

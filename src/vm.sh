@@ -1,4 +1,10 @@
 #!/bin/bash
+if ! command -v sshpass &>/dev/null;
+then
+	printf "You have to install sshpass to use vm!\n"
+	exit 1
+fi
+
 subject=''
 host=''
 access=''
