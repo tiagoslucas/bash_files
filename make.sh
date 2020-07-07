@@ -13,5 +13,4 @@ do
   name=${i%.*}
   printf "Building $name\n"
   shc -f $source/src/$i -o $source/target/$name
-  sudo cp $source/target/$name /usr/local/bin/
 done
