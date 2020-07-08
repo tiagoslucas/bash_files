@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if ! command -v kubectl &>/dev/null;
 then
 	printf "You have to install kubectl to use pod!\n"

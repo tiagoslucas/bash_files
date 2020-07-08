@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if ! command -v sshpass &>/dev/null;
 then
 	printf "You have to install sshpass to use vm!\n"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 source=$(cd "$( dirname "$0" )" && pwd)
 
 if [[ $# -gt 0 ]];

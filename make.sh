@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if ! command -v shc &>/dev/null;
 then
 	printf "You have to install shc to make from source!\n"

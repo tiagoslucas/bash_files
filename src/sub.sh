@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if ! command -v git &>/dev/null;
 then
 	printf "You have to install git to use sub!\n"
