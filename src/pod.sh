@@ -3,9 +3,7 @@ if ! command -v kubectl &>/dev/null;
 then
 	printf "You have to install kubectl to use pod!\n"
 	exit 1
-fi
-
-if [[ $# -lt 1 ]];
+elif [[ $# -lt 1 ]];
 then
 	printf "Please provide part of a pod name!\n"
 	exit 1
