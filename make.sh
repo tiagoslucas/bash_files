@@ -1,4 +1,10 @@
 #!/bin/bash
+if ! command -v shc &>/dev/null;
+then
+	printf "You have to install shc to make from source!\n"
+	exit 1
+fi
+
 source=$(cd "$( dirname "$0" )" && pwd)
 
 if [[ $# -gt 0 ]];
@@ -12,5 +18,5 @@ for i in $list;
 do
   name=${i%.*}
   printf "Building $name\n"
-  shc -f $source/src/$i -o $source/target/$name
+  shc -rf $source/src/$i -o $source/target/$name
 done
