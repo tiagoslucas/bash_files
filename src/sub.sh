@@ -11,7 +11,7 @@ then
   gitcmd="git $1"
   type='cmd'
 else
-  gitcmd='git fetch && git status -s && git --no-optional-locks status | grep -e behind -e ahead -e each'
+  gitcmd=''
   type='dir'
 fi
 
@@ -39,12 +39,22 @@ do
     done
   elif [[ -z `eval "git $source" 2>&1 | grep -e "not a git command" -e "unknown option"` ]]
   then
-    gitcmd="$gitcmd && git $source"
+  	if [[ -z $gitcmd ]];
+	then
+		gitcmd="git $source"
+	else
+		gitcmd="$gitcmd && git $source"
+	fi
   elif [[ -z `eval "$gitcmd $source" 2>&1 | grep -e "not a git command" -e "unknown option"` ]]
   then
     gitcmd="$gitcmd $source"
   fi
 done
+
+if [[ -z $gitcmd ]];
+then
+	gitcmd='git fetch && git status -s && git --no-optional-locks status | grep -e behind -e ahead -e each'
+fi
 
 for i in ${repos[@]}
 do
