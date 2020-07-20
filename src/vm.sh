@@ -1,5 +1,9 @@
-#!/bin/sh
-if ! command -v sshpass &>/dev/null;
+#!/bin/bash
+if [ -z $(command -v bash) ];
+then
+  printf "You have to install bash to use sub!\n"
+  exit 1
+elif [ -z $(command -v sshpass) ];
 then
 	printf "You have to install sshpass to use vm!\n"
 	exit 1
@@ -52,7 +56,7 @@ fi
 
 if [[ ! -n $access ]] || [[ ! -n $host ]];
 then
-	printf "No matches found!"
+	printf "No matches found!\n"
 	exit 1
 elif [[ ! -n $sshkey ]];
 then

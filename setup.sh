@@ -1,7 +1,7 @@
 #!/bin/sh
 source=$(cd "$( dirname "$0" )" && pwd)
 
-if [[ $# -gt 0 ]];
+if [ $# -gt 0 ];
 then
 	list=$(ls $source/target | grep $1)
 else

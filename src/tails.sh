@@ -1,5 +1,5 @@
 #!/bin/sh
-if ! command -v kubectl &>/dev/null;
+if [ -z $(command -v kubectl) ];
 then
 	printf 'You have to install kubectl to use TaiLS!\n'
 	exit 1

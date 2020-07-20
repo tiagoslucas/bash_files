@@ -1,5 +1,5 @@
 #!/bin/sh
-if ! command -v git &>/dev/null;
+if [ -z $(command -v git) ];
 then
 	printf "You have to install git to use forcepush!\n"
 	exit 1

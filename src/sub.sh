@@ -1,5 +1,9 @@
-#!/bin/sh
-if ! command -v git &>/dev/null;
+#!/bin/bash
+if [ -z $(command -v bash) ];
+then
+  printf "You have to install bash to use sub!\n"
+  exit 1
+elif [ -z $(command -v git) ];
 then
 	printf "You have to install git to use sub!\n"
 	exit 1
