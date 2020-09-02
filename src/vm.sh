@@ -5,8 +5,8 @@ then
   exit 1
 elif [ -z $(command -v sshpass) ];
 then
-	printf "You have to install sshpass to use vm!\n"
-	exit 1
+    printf "You have to install sshpass to use vm!\n"
+    exit 1
 fi
 
 lines=''
@@ -15,61 +15,66 @@ touch ~/.servermachines
 
 if [[ $# -gt 1 ]]
 then
-	subject=$1
-	access=$2
+    subject=$1
+    access=$2
 
-	sshkey=$(ssh-keyscan "${1##*@}" 2>/dev/null)
-	if [[ -n $sshkey ]];
-	then
-		host=$1
-	fi
+    sshkey=$(ssh-keyscan "${1##*@}" 2>/dev/null)
+    if [[ -n $sshkey ]];
+    then
+        host=$1
+    fi
 elif [[ $# -gt 0 ]];
 then
-	subject=$1
+    subject=$1
 else
-	subject=''
+    subject=''
 fi
 
 if  [[ -n $host ]] && [[ -n $access ]];
 then
-	lines="$(cat ~/.servermachines)$host%%%$access$newline"
+    oldlines=$(cat ~/.servermachines)
+    if [[ -n $oldlines ]];
+    then
+        oldlines="$oldlines$newline"
+    fi
+    lines="$oldlines$host%%%$access"
 else
-	while read i;
-	do
-		if [[ ! -n $host ]] && [[ $i == $subject* ]];
-		then
-			host=$(awk -F '%%%' '{print $1}' <<< $i)
-			if  [[ -n $access ]];
-			then
-				line="$host%%%$access"
-			else
-				access=$(awk -F '%%%' '{print $2}' <<< $i)
-			fi
-		fi
-		if [[ -n $i ]];
-		then
-			lines="${lines}${line:-$i}${newline}"
-			unset line
-		fi
-	done < ~/.servermachines
+    while read i;
+    do
+        if [[ -z $host ]] && [[ $i == $subject* ]];
+        then
+            host=$(awk -F '%%%' '{print $1}' <<< $i)
+            if  [[ -n $access ]];
+            then
+                line="$host%%%$access"
+            else
+                access=$(awk -F '%%%' '{print $2}' <<< $i)
+            fi
+        fi
+        if [[ -n $i ]];
+        then
+            lines="$lines${line:-$i}$newline"
+            unset line
+        fi
+    done < ~/.servermachines
 fi
 
-if [[ ! -n $access ]] || [[ ! -n $host ]];
+if [[ -z $access ]] || [[ -z $host ]];
 then
-	printf "No matches found!\n"
-	exit 1
+    printf "No matches found!\n"
+    exit 1
 elif [[ ! -n $sshkey ]];
 then
-	sshkey=$(ssh-keyscan "${host##*@}" 2>/dev/null)
+    sshkey=$(ssh-keyscan "${host##*@}" 2>/dev/null)
 fi
 
 while read i;
 do
-	grep -qxF "$i" ~/.ssh/known_hosts || printf "%s\n" "$i" >> ~/.ssh/known_hosts
+    grep -qxF "$i" ~/.ssh/known_hosts || printf "%s\n" "$i" >> ~/.ssh/known_hosts
 done <<< "$sshkey"
 
 env SSHPASS=$access sshpass -e ssh $host
 if [[ $? == 0 ]];
 then
-	printf "%s" "$lines" > ~/.servermachines
+    printf "%s" "$lines" > ~/.servermachines
 fi
