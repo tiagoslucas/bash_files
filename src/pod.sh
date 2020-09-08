@@ -9,4 +9,4 @@ then
 	exit 1
 fi
 
-kubectl exec -it $(kubectl get pods -A | grep $1 | awk '{print $2}') "${@:2}" -- /bin/sh
+kubectl exec -it $(kubectl get pods -A | grep $1 | awk 'END{print $2}') "${@:2}" -- /bin/sh
