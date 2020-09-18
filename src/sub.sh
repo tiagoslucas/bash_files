@@ -1,13 +1,13 @@
 #!/bin/bash
-if [ -z $(command -v bash) ];
-then
-  printf "You have to install bash to use sub!\n"
-  exit 1
-elif [ -z $(command -v git) ];
-then
-	printf "You have to install git to use sub!\n"
-	exit 1
-fi
+dependencies="bash git ls grep"
+for dependency in $dependencies;
+do
+	if [ -z $(command -v $dependency) ];
+	then
+		printf "You have to install $dependency to use sub!\n"
+		exit 1
+	fi
+done
 
 origin=$(pwd)
 if [[ `echo $1 | grep [[:alpha:]]` && -z `git $1 2>&1 | grep "not a git command"` ]]

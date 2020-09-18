@@ -1,9 +1,13 @@
 #!/bin/sh
-if [ -z $(command -v git) ];
-then
-	printf "You have to install git to use forcepush!\n"
-	exit 1
-fi
+dependencies="git"
+for dependency in $dependencies;
+do
+	if [ -z $(command -v $dependency) ];
+	then
+		printf "You have to install $dependency to use forcepush!\n"
+		exit 1
+	fi
+done
 
 if ! git rev-parse 2>/dev/null;
 then

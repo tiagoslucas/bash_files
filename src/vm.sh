@@ -1,13 +1,13 @@
 #!/bin/bash
-if [ -z $(command -v bash) ];
-then
-  printf "You have to install bash to use vm!\n"
-  exit 1
-elif [ -z $(command -v sshpass) ];
-then
-    printf "You have to install sshpass to use vm!\n"
-    exit 1
-fi
+dependencies="bash grep awk sshpass ssh-keyscan"
+for dependency in $dependencies;
+do
+	if [ -z $(command -v $dependency) ];
+	then
+		printf "You have to install $dependency to use vm!\n"
+		exit 1
+	fi
+done
 
 lines=''
 printf -v newline "\n"
