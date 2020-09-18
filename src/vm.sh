@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z $(command -v bash) ];
 then
-  printf "You have to install bash to use sub!\n"
+  printf "You have to install bash to use vm!\n"
   exit 1
 elif [ -z $(command -v sshpass) ];
 then
@@ -39,7 +39,7 @@ then
     fi
     lines="$oldlines$host%%%$access"
 else
-    while read i;
+    while read -r i;
     do
         if [[ -z $host ]] && [[ $i == $subject* ]];
         then
@@ -56,7 +56,7 @@ else
             lines="$lines${line:-$i}$newline"
             unset line
         fi
-    done < ~/.servermachines
+    done < <(grep '' ~/.servermachines)
 fi
 
 if [[ -z $access ]] || [[ -z $host ]];
@@ -68,7 +68,7 @@ then
     sshkey=$(ssh-keyscan "${host##*@}" 2>/dev/null)
 fi
 
-while read i;
+while read -r i;
 do
     grep -qxF "$i" ~/.ssh/known_hosts || printf "%s\n" "$i" >> ~/.ssh/known_hosts
 done <<< "$sshkey"
