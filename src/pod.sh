@@ -1,5 +1,5 @@
 #!/bin/sh
-dependencies="kubectl grep awk"
+dependencies="kubectl awk"
 for dependency in $dependencies;
 do
 	if [ -z $(command -v $dependency) ];
@@ -15,4 +15,4 @@ then
 	exit 1
 fi
 
-kubectl exec -it $(kubectl get pods -A | grep $1 | awk 'END{print $2}') "${@:2}" -- /bin/sh
+kubectl exec -it $(kubectl get pods -A | awk -v a=$1 '$2 ~ a {b=$2} END{print b}') "${@:2}" -- /bin/sh

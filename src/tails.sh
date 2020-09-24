@@ -1,5 +1,5 @@
 #!/bin/sh
-dependencies="kubectl grep awk"
+dependencies="kubectl awk"
 for dependency in $dependencies;
 do
 	if [ -z $(command -v $dependency) ];
@@ -9,5 +9,5 @@ do
 	fi
 done
 
-pod=$(kubectl get po --sort-by=.metadata.creationTimestamp | grep tls-scan-cronjob | awk '{a=$2} END{print $a}')
+pod=$(kubectl get po --sort-by=.metadata.creationTimestamp | awk '/tls-scan-cronjob/ {a=$2} END{print $a}')
 kubectl exec -i $pod -- tail -f backup/$pod.log
