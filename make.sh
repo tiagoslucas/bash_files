@@ -1,12 +1,15 @@
 #!/bin/sh
-if [ -z $(command -v shc) ];
-then
-	printf "You have to install shc to make from source!\n"
-	exit 1
-fi
+dependencies="dirname pwd ls grep shc"
+for dependency in $dependencies;
+do
+	if [ -z $(command -v $dependency) ];
+	then
+		printf "You have to install $dependency to make from source!\n"
+		exit 1
+	fi
+done
 
 source=$(cd "$( dirname "$0" )" && pwd)
-
 if [ $# -gt 0 ];
 then
 	list=$(ls $source/src | grep $1.*\.sh$)
