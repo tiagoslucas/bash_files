@@ -9,5 +9,5 @@ do
 	fi
 done
 
-pod=$(kubectl get po --sort-by=.metadata.creationTimestamp | awk '/tls-scan-cronjob/ {a=$2} END{print $a}')
-kubectl exec -i $pod -- tail -f backup/$pod.log
+pod=$(kubectl get po --sort-by=.metadata.creationTimestamp | awk '/tls-scan-cronjob/ {a=$1} END{print a}')
+kubectl exec -i $pod -- tail backup/$pod.log $@
