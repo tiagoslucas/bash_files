@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+  jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: curl
+      uses: enflo/curl-action@master
+      with:
+        curl: -X GET https://actions.ctf.cert.unlp.edu.ar
