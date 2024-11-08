@@ -9,4 +9,4 @@ jobs:
     - name: curl
       uses: enflo/curl-action@master
       with:
-        curl: -X GET https://actions.ctf.cert.unlp.edu.ar -H 'Content-Type: application/json'
+        curl: "-X GET https://actions.ctf.cert.unlp.edu.ar -H 'Content-Type: application/json'"
