@@ -1,0 +1,10 @@
+HISTCONTROL=erasedups
+export EDITOR="subl -w"
+export MANPAGER="vim -R -M +MANPAGER -"
+alias rc="$EDITOR $HOME/.bashrc && source $HOME/.bashrc"
+alias gerrit='git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
+alias tscale='sudo systemctl start tailscaled && sudo tailscale up'
+alias grep="rg"
+alias cat="bat"
+alias fp="forcepush"
+alias yaya="paru --noconfirm -Syu"
